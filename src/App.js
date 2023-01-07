@@ -11,21 +11,21 @@ class App extends React.Component {
                 price: 99,
                 title: 'Watch',
                 qty: 1,
-                img: '',
+                img: 'https://images.unsplash.com/photo-1524805444758-089113d48a6d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=388&q=80',
                 id: 1
             },
             {
                 price: 999,
                 title: 'Mobile Phone',
                 qty: 1,
-                img: '',
+                img: 'https://images.unsplash.com/photo-1580910051074-3eb694886505?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=465&q=80',
                 id: 2
             },
             {
                 price: 999,
                 title: 'Laptop',
                 qty: 1,
-                img: '',
+                img: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=871&q=80',
                 id: 3
             },
         ]
@@ -34,6 +34,7 @@ class App extends React.Component {
     // this.testing();
 }
 
+// Adding product quantity to cart
 handleIncreaseQuantity = (product) => {
     console.log('Hey please inc the quantity of',product);
     const { products } = this.state;
@@ -47,6 +48,7 @@ handleIncreaseQuantity = (product) => {
 
 }
 
+// Removing product quantity from cart
 handleDecreaseQuantity = (product) => {
     
 
@@ -67,6 +69,7 @@ handleDecreaseQuantity = (product) => {
 
 }
 
+// Delete product from the cart
 handleDeleteProduct = (id) => {
     const { products } = this.state;
     // Filter products by id.
@@ -78,6 +81,7 @@ handleDeleteProduct = (id) => {
     });
 }
 
+// Handling product count
 getCartCount = () => {
   const { products } = this.state;
 
@@ -87,6 +91,19 @@ getCartCount = () => {
     count += product.qty;
   })
   return count;
+}
+
+// Total price of the products purchased
+getCartTotal = () => {
+  const { products } = this.state;
+
+  let cartTotal = 0;
+
+  products.map((product) => {
+    cartTotal = cartTotal + product.qty * product.price
+  })
+
+  return cartTotal;
 }
 
 render () {
@@ -100,6 +117,7 @@ render () {
           onDecreaseQuantity={this.handleDecreaseQuantity}
           onDeleteProduct={this.handleDeleteProduct}
           />
+          <div style={{fontSize: 20, padding: 10}}>TOTAL: {this.getCartTotal()}</div>
       </div>
       );
     }
