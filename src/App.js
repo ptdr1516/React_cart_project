@@ -107,11 +107,24 @@ handleDeleteProduct = (id) => {
     const { products } = this.state;
     // Filter products by id.
     // Checks if the item has the same id as the item which has to be deleted.
-    const items = products.filter((item) => item.id !== id);
+    // const items = products.filter((item) => item.id !== id);
 
-    this.setState({ 
-        products: items
-    });
+    // this.setState({ 
+    //     products: items
+    // });
+
+    // reference of particular product
+    const docRef = this.db.collection('products').doc(id);
+
+    docRef
+      .delete()
+      .then(() => {
+        console.log('Deleted Successfully');
+      })
+      .catch((error) => {
+        console.log('Error: ',error);
+       })
+      
 }
 
 // Handling product count
