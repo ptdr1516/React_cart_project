@@ -79,12 +79,26 @@ handleDecreaseQuantity = (product) => {
         return;
     }
 
-    products[index].qty -= 1;
+    // reference of particular product
+    const docRef = this.db.collection('products').doc(products[index].id);
+    
+    docRef
+       .update({
+            qty: products[index].qty - 1
+       })
+       .then(() => {
+        console.log('Updated Successfully')
+       })
+       .catch((error) => {
+        console.log('Error: ',error);
+       })
+
+    // products[index].qty -= 1;
 
     
-    this.setState({ 
-        products 
-    });
+    // this.setState({ 
+    //     products 
+    // });
 
 }
 
