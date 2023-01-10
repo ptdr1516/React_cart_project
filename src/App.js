@@ -13,6 +13,7 @@ class App extends React.Component {
         products: [],
         loading: true
     }
+    this.db = firestore
     // this.increaseQuantity = this.increaseQuantity.bind(this);
     // this.testing();
 }
@@ -21,8 +22,7 @@ componentDidMount () {
     
      firestore
      .collection('products')
-     .get()
-     .then((snapshot) => {
+     .onSnapshot((snapshot) => {
         console.log(snapshot);
 
         snapshot.docs.map((doc) => {
@@ -48,12 +48,25 @@ handleIncreaseQuantity = (product) => {
     const { products } = this.state;
     const index = products.indexOf(product);
 
-    products[index].qty += 1;
+    // products[index].qty += 1;
     
-    this.setState({ 
-        products 
-    });
+    // this.setState({ 
+    //     products 
+    // });
 
+    // reference of particular product
+    const docRef = this.db.collection('products').doc(products[index].id);
+    
+    docRef
+       .update({
+            qty: products[index].qty + 1
+       })
+       .then(() => {
+        console.log('Updated Successfully')
+       })
+       .catch((error) => {
+        console.log('Error: ',error);
+       })
 }
 
 // Removing product quantity from cart
@@ -112,11 +125,30 @@ getCartTotal = () => {
   return cartTotal;
 }
 
+addProduct = () => {
+    firestore
+     .collection('products')
+     .add({
+        img: 'https://media.wired.com/photos/601dde27f1bf194f33695d95/3:4/w_1347,h_1796,c_limit/Gear-PS5-2-src-Sony-teal.jpg',
+        price: 900,
+        qty: 2,
+        title: 'ps5'
+     })
+     .then((docRef) => {
+        console.log('Product has been added',docRef)
+     })
+     .catch((error) => {
+        console.log('Error: ', error);
+     })
+     
+}
+
 render () {
   const { products, loading } = this.state;
   return (
       <div className="App">
           <Navbar count={this.getCartCount()} />
+          {/* <button onClick={this.addProduct} style={{padding: 20, fontSize: 20}}>Add a product</button> */}
           <Cart 
           products={ products }
           onIncreaseQuantity={this.handleIncreaseQuantity}
